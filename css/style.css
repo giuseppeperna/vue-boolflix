@@ -104,11 +104,14 @@ header img {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  flex-basis: 200px;
+  flex-basis: 220px;
   margin: 10px 20px;
-  background: rgb(46, 58, 70);
+  /* background: rgb(46, 58, 70); */
+  background-color: rgba(0,0,0,0.3);
   text-align: center;
   padding:5px 5px 15px 5px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .movie img {
@@ -116,7 +119,7 @@ header img {
 }
 
 .movie h3 {
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
   color: white;
   font-size: 1rem;
   text-transform: uppercase;
@@ -124,10 +127,17 @@ header img {
 
 .movie span.original-title {
   color: grey;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 15px;
 }
 
 .movie span.year, .movie span.vote {
   color: grey;
   margin-top: 10px;
+  font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

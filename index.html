@@ -41,7 +41,7 @@
           <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <h3>{{movie.title}}</h3>
           <span class="original-title">{{movie.original_title}}</span>
-          <span class="year">Lingua: {{movie.original_language}}</span>
+          <span class="year">Lingua: <span class="uppercase">{{movie.original_language}}</span></span>
           <span class="vote">Voto: {{movie.vote_average}}</span>
         </div>
       </div>
