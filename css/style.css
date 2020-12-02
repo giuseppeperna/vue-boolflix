@@ -1,0 +1,123 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1E2D3B;
+  min-height: 100vh;
+}
+
+/* COMMON */
+
+.container-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.center-items {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-space-around {
+  justify-content: space-around;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.center-text {
+  text-align: center;
+}
+
+/* HEADER */
+
+.header-container {
+  width: 90%;
+  max-width: 1920px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+header {
+  width: 100%;
+  height: 70px;
+  background: rgb(46, 58, 70);
+}
+header img {
+  width: 80px;
+}
+
+.search-bar input {
+  height: 30px;
+  width: 250px;
+  border-radius: 5px;
+  border: none;
+  padding-left: 10px;
+}
+
+.search-bar button {
+  height: 30px;
+  width: 60px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+/* MOVIE AND TV SECTION */
+
+.movie-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 100px 0;
+}
+
+.movie {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: 200px;
+  padding: 20px;
+  margin: 10px 20px;
+  height: 360px;
+  background: rgb(46, 58, 70);
+  text-align: center;
+}
+
+.movie img {
+  max-width: 100%;
+}
+
+.movie h3 {
+  margin: 20px 0;
+  color: white;
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.movie span.original-title {
+  color: grey;
+  font-size: 20px;
+}
+
+.movie span.year, .movie span.vote {
+  color: grey;
+  margin-top: 10px;
+}

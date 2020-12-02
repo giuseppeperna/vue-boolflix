@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- FONT-AWESOME -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- VUE.JS -->
+    <script src="libs/vue.js" charset="utf-8"></script>
+
+    <!-- AXIOS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Boolflix</title>
+  </head>
+  <body>
+
+    <!-- Vue App section -->
+    <div id="boolFlix">
+      
+      <!-- Logo and search bar -->
+      <header>
+        <div class="header-container container-flex flex-row center-items justify-space-between">
+            <img src="img/netflix-logo.png" alt="logo" />
+            <div class="search-bar">
+              <input type="text" placeholder="Cerca Film o Serie TV" v-model="search" @keypress.enter="searchMovie()">
+              <button @click="searchMovie()">Cerca</button>
+            </div>
+        </div>
+      </header>
+      
+      <!-- Movie and tv section -->
+      <div class="movie-container container">
+        <div class="movie" v-for="(movie, index) in movies">
+            <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+            <h3>{{movie.title}}</h3>
+            <span class="original-title">{{movie.original_title}}</span>
+            <span class="year">Lingua: {{movie.original_language}}</span>
+            <span class="vote">Vote: {{movie.vote_average}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="js/main.js" charset="utf-8"></script>
+  </body>
+</html>
