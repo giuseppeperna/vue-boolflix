@@ -24,22 +24,25 @@
       <!-- Logo and search bar -->
       <header>
         <div class="header-container container-flex flex-row center-items justify-space-between">
+          <div class="container-flex flex-row center-items">
             <img src="img/netflix-logo.png" alt="logo" />
-            <div class="search-bar">
-              <input type="text" placeholder="Cerca Film o Serie TV" v-model="search" @keypress.enter="searchMovie()">
-              <button @click="searchMovie()">Cerca</button>
-            </div>
+            <img src="img/netflix-text.png" alt="">
+          </div>
+          <div class="search-bar">
+            <input type="text" placeholder="Cerca Film o Serie TV" v-model="search" @keypress.enter="searchMovie()">
+            <button @click="searchMovie()">Cerca</button>
+          </div>
         </div>
       </header>
       
       <!-- Movie and tv show section -->
       <div class="movie-container container">
         <div class="movie" v-for="(movie, index) in movies">
-            <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
-            <h3>{{movie.title}}</h3>
-            <span class="original-title">{{movie.original_title}}</span>
-            <span class="year">Lingua: {{movie.original_language}}</span>
-            <span class="vote">Voto: {{movie.vote_average}}</span>
+          <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+          <h3>{{movie.title}}</h3>
+          <span class="original-title">{{movie.original_title}}</span>
+          <span class="year">Lingua: {{movie.original_language}}</span>
+          <span class="vote">Voto: {{movie.vote_average}}</span>
         </div>
       </div>
     </div>
