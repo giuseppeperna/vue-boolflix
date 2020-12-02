@@ -96,6 +96,7 @@ header img {
   margin: 10px 20px;
   background: rgb(46, 58, 70);
   text-align: center;
+  padding:5px 5px 15px 5px;
 }
 
 .movie img {
@@ -111,7 +112,7 @@ header img {
 
 .movie span.original-title {
   color: grey;
-  font-size: 20px;
+  font-size: 1rem;
 }
 
 .movie span.year, .movie span.vote {
