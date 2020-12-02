@@ -70,7 +70,7 @@ header {
   background: rgb(46, 58, 70);
 }
 header img {
-  width: 90px;
+  width: 80px;
 }
 
 .search-bar input {
@@ -106,7 +106,6 @@ header img {
   flex-direction: column;
   flex-basis: 220px;
   margin: 10px 20px;
-  /* background: rgb(46, 58, 70); */
   background-color: rgba(0,0,0,0.3);
   text-align: center;
   padding:5px 5px 15px 5px;
