@@ -29,15 +29,24 @@
             <img src="img/netflix-text.png" alt="logo-text">
           </div>
           <div class="search-bar">
-            <input type="text" placeholder="Cerca Film o Serie TV" v-model="search" @keypress.enter="searchMovie()">
+            <input type="text" placeholder="Cerca Film" v-model="search" @keypress.enter="searchMovie()" value="">
+            <select name="genres" id="" v-model="selectedGenre">
+              <option value="all">All</option>
+              <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+            </select>
             <button @click="searchMovie()">Cerca</button>
           </div>
         </div>
       </header>
+
+      <div class="search-result">
+        <h1 class="white-text" v-if="movies.length > 0">Risultati per: {{searchResult[0]}}</h1>
+        <p class="white-text" v-if="movies.length > 0">Film trovati: {{filterMovies.length}}</p>
+      </div>
       
       <!-- Movie and tv show section -->
       <div class="movie-container container">
-        <div class="movie" v-for="(movie, index) in movies">
+        <div class="movie" v-for="(movie, index) in filterMovies">
           <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <h3>{{movie.title}}</h3>
           <span class="original-title">{{movie.original_title}}</span>

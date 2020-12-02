@@ -13,7 +13,8 @@
  1) Ricerca sull'API dei film e rispettive informazioni.
  2) Campo cerca nel quale inserire il titolo del film e pulsante (oppure il tasto enter) per attivare la ricerca nell'API.
  3) Se il campo input è vuoto, il tasto cerca concella la ricerca precedente.
- 4) Nel caso in cui un immagine non fosse disponibile, viene visualizzata una immagine alternativa.
+ 4) Nel caso in cui un immagine non fosse disponibile, viene visualizzata un'immagine alternativa.
+ 5) Possibilità di ricercare il titolo del film con un filtro in base al genere.
 
  @author Giuseppe Perna <giuseppeperna.cg@gmail.com>
  */
@@ -26,10 +27,22 @@ const boolFlix = new Vue({
     el: '#boolFlix',
     data: {
         movies:[],
+        genres:[],
         search:"",
+        searchResult:[],
+        selectedGenre:"all",
     },
+    mounted() { // API call to get movie genres
+        axios.get("https://api.themoviedb.org/3/genre/movie/list", {
+            params: {
+                'api_key': API_KEY,
+            }
+        }).then(result => {
+            this.genres= result.data.genres;
+        })
+     },
     methods: {
-        searchMovie() {
+        searchMovie() { 
             axios.get("https://api.themoviedb.org/3/search/movie", {
                 params: {
                     'api_key': API_KEY,
@@ -37,7 +50,20 @@ const boolFlix = new Vue({
                 }
             }).then(result => {
                 this.movies = result.data.results;
+                this.searchResult = [this.search];
+                this.search ="";
             }).catch(()=> this.movies = []);
         },
     },
-})
+    computed: { 
+        filterMovies() {
+            if (this.selectedGenre !== 'all') {
+                return this.movies.filter (movie => {
+                    return movie.genre_ids.includes(this.selectedGenre);
+                })
+            } else {
+                return this.movies;
+            }
+        }
+      }
+});
