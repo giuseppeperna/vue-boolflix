@@ -30,7 +30,7 @@
             <img class="logo" src="img/netflix-text.png" alt="logo-text">
             <div class="container container-flex flex-row center-items">
               <ul class="nav-menu">
-                <a class="white-text" href="#"><li>Home</li></a>
+                <a class="white-text" href="#" @click="homepageRefresh()"><li>Home</li></a>
                 <a class="white-text" href="#"><li>Serie Tv</li></a>
                 <a class="white-text" href="#"><li>Film</li></a>
                 <a class="white-text" href="#"><li>Aggiunti di recente</li></a>
@@ -72,7 +72,94 @@
       </div>
       
       <!-- MOVIES AND TV SHOWS SECTION -->
-      <div class="movie-container container">
+
+      <!-- Top rated movies -->
+      <h1 class="title-section white-text" v-if="movies.length < 1">I film più popolari</h1>
+      <div class="home-sections" v-if="movies.length < 1">
+        <div class="home-sections home-sections-container popular-films">
+          <div class="movie" v-for="(movie, index) in topRatedMovies">
+            <!-- Poster -->
+            <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+            <!-- Movies and TV Shows infos -->
+            <div class="movie-info container-flex flex-column">
+              <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+              <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+              <div>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              </div>
+              <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+              <div class="container-flex row justify-center">
+                <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slider container-flex flex-row center-items justify-space-between">
+          <i class="fas fa-chevron-left white-text" @click="scrollLeft('.popular-films')"></i>
+          <i class="fas fa-chevron-right white-text" @click="scrollRight('.popular-films')"></i>
+        </div>
+      </div>
+
+      <!-- Top rated TV Shows -->
+      <h1 class="title-section white-text" v-if="movies.length < 1">Le serie tv del momento</h1>
+      <div class="home-sections" v-if="movies.length < 1">
+        <div class="home-sections home-sections-container popular-shows">
+          <div class="movie" v-for="(movie, index) in topRatedTvShows">
+            <!-- Poster -->
+            <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+            <!-- Movies and TV Shows infos -->
+            <div class="movie-info container-flex flex-column">
+              <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+              <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+              <div>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              </div>
+              <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+              <div class="container-flex row justify-center">
+                <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slider container-flex flex-row center-items justify-space-between">
+          <i class="fas fa-chevron-left white-text" @click="scrollLeft('.popular-shows')"></i>
+          <i class="fas fa-chevron-right white-text" @click="scrollRight('.popular-shows')"></i>
+        </div>
+      </div>
+
+      <!-- Upcoming -->
+      <h1 class="title-section white-text" v-if="movies.length < 1">Ultime uscite</h1>
+      <div class="home-sections" v-if="movies.length < 1">
+        <div class="home-sections home-sections-container upcoming">
+          <div class="movie" v-for="(movie, index) in upcoming">
+            <!-- Poster -->
+            <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+            <!-- Movies and TV Shows infos -->
+            <div class="movie-info container-flex flex-column">
+              <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+              <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+              <div>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              </div>
+              <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+              <div class="container-flex row justify-center">
+                <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slider container-flex flex-row center-items justify-space-between">
+          <i class="fas fa-chevron-left white-text" @click="scrollLeft('.upcoming')"></i>
+          <i class="fas fa-chevron-right white-text" @click="scrollRight('.upcoming')"></i>
+        </div>
+      </div>
+
+
+
+      <div class="movie-container">
 
         <!-- Movies and TV Shows card template -->
         <div class="movie" v-for="(movie, index) in filterMovies">

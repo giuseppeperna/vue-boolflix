@@ -47,6 +47,7 @@ aggiuntive già prese nei punti precedenti più la overview.
  6) Per indicare la lingua del film o della serie tv, viene mostrata la bandierina del paese. Una bandiera alternativa
  viene mostrata per quelle mancanti.
  7) Per ogni titolo, tramite hover vengono mostrate tutte le info riguardanti il film o la serie tv.
+ 8) Diverse sezioni con film e serie tv nella hompage, con slider per scorrere tra i titoli.
 
  @author Giuseppe Perna <giuseppeperna.cg@gmail.com>
  */
@@ -59,6 +60,9 @@ const boolFlix = new Vue({
     el: '#boolFlix',
     data: {
         movies:[],
+        topRatedMovies:[],
+        topRatedTvShows:[],
+        upcoming:[],
         tvShows:[],
         genres:[],
         search:"",
@@ -68,13 +72,39 @@ const boolFlix = new Vue({
         selectedPage:1,
         selectedGenre:"all",
     },
-    mounted() { // API call to get movie genres
+    mounted() { // API call to get movie and tv shows infos
         axios.get("https://api.themoviedb.org/3/genre/movie/list", {
             params: {
                 'api_key': API_KEY,
             }
         }).then(result => {
             this.genres= result.data.genres;
+        }),
+        axios.get("https://api.themoviedb.org/3/discover/movie", {
+            params: {
+                'api_key': API_KEY,
+                'sort_by': 'popularity.desc',
+                language:"it-IT",
+            }
+        }).then(result => {
+            this.topRatedMovies= result.data.results;
+        }),
+        axios.get("https://api.themoviedb.org/3/discover/tv", {
+            params: {
+                'api_key': API_KEY,
+                'sort_by': 'popularity.desc',
+                language:"it-IT",
+            }
+        }).then(result => {
+            this.topRatedTvShows= result.data.results;
+        }),
+        axios.get("https://api.themoviedb.org/3/movie/upcoming", {
+            params: {
+                'api_key': API_KEY,
+                language:"it-IT",
+            }
+        }).then(result => {
+            this.upcoming= result.data.results;
         })
      },
     methods: {
@@ -84,27 +114,41 @@ const boolFlix = new Vue({
                     'api_key': API_KEY,
                     query: this.search,
                     page: this.selectedPage,
+                    language:"it-IT",
                 }
             }).then(result => {
                 this.movies = result.data.results;
                 this.searchResult = [this.search];
-                // this.search ="";
+                this.search ="";
                 this.totalPages = result.data.total_pages;
                 this.totalResults = result.data.total_results;
             }).catch(()=> this.movies = []);
-        },searchTvShow() {
+        },
+        searchTvShow() {
             axios.get("https://api.themoviedb.org/3/search/tv", {
                 params: {
                     'api_key': API_KEY,
                     query: this.search,
                     page: this.selectedPage,
+                    language:"it-IT",
                 }
             }).then(result => {
                 this.tvShows = result.data.results;
                 this.movies = [...this.movies.concat(this.tvShows)]
                 this.totalResults += result.data.total_results;
-                console.log(this.tvShows)
             })
+        },
+        scrollRight(target) {
+            let content = document.querySelector(target);
+            content.scrollLeft += 60;
+        },
+        scrollLeft(target) {
+            let content = document.querySelector(target);
+            content.scrollLeft -= 60;
+          },
+        homepageRefresh() {
+            this.movies = [];
+            this.search ="";
         }
     },
     computed: { 

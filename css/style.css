@@ -6,7 +6,6 @@
 
 body {
   background-color: #161616;
-  background-image: url("../img/netflix-text.png");
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: 400px;
@@ -105,6 +104,7 @@ header {
 .search-bar img {
   width: 30px;
   margin: 0 5px 0 15px;
+  border-radius: 4px;
 }
 
 .chevron {
@@ -160,6 +160,7 @@ header {
   border-radius: 50%;
   font-size: 0.6rem;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .notification-number span {
@@ -167,6 +168,7 @@ header {
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
+  cursor: pointer;
 }
 
 .search-icon {
@@ -189,6 +191,46 @@ header {
   padding: 50px 0 100px 0;
 }
 
+.home-sections {
+  position: relative
+}
+
+.home-sections-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  padding: 10px 100px 60px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+.slider {
+  position: absolute;
+  top:10%;
+  width: 100%;
+  height: 330px;
+}
+
+.slider i {
+  font-size: 3rem;
+  margin: 0 15px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(6px 6px 6px #000);
+  cursor: pointer;
+}
+
+.slider i:hover {
+  transform: scale(1.4);
+  transition: transform .6s;
+}
+
+.title-section {
+  margin-left: 20px
+  
+}
+
 .movie {
   display: flex;
   justify-content: flex-start;
@@ -197,6 +239,14 @@ header {
   margin: 10px 2px;
   border-radius: 5px;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.movie:hover {
+  transform: scale(1.1);
+  transition: transform .5s;
+  box-shadow: 1px 1px 7px 2px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
 .movie h3 {
