@@ -197,10 +197,10 @@ header {
 
 .home-sections-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: nowrap;
   overflow: hidden;
-  padding: 10px 100px 60px 100px;
+  padding: 10px 0 60px 0;
   position: relative;
   z-index: 1;
 }

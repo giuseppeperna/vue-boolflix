@@ -140,11 +140,11 @@ const boolFlix = new Vue({
         },
         scrollRight(target) {
             let content = document.querySelector(target);
-            content.scrollLeft += 60;
+            content.scrollLeft += 200;
         },
         scrollLeft(target) {
             let content = document.querySelector(target);
-            content.scrollLeft -= 60;
+            content.scrollLeft -= 200;
           },
         homepageRefresh() {
             this.movies = [];
