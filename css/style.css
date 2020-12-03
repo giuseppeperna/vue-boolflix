@@ -5,7 +5,7 @@
 }
 
 body {
-  background: #161616;
+  background-color: #161616;
   background-image: url("../img/netflix-text.png");
   background-repeat: no-repeat;
   background-position: 50%;
@@ -78,7 +78,7 @@ header {
   height: 70px;
   background: rgb(19, 20, 20);
 }
-header img {
+.logo {
   width: 120px;
   margin-right: 40px;
 }
@@ -95,11 +95,25 @@ header img {
 
 .nav-menu a:hover {
   color: #e50914;
+  transition: color.6s;
+}
+
+.search-bar > * {
+  margin: 0 5px;
+}
+
+.search-bar img {
+  width: 30px;
+  margin: 0 5px 0 15px;
+}
+
+.chevron {
+  font-size: 0.6rem;
 }
 
 .search-bar input {
   height: 30px;
-  width: 250px;
+  width: 120px;
   border-radius: 5px;
   border: none;
   padding-left: 10px;
@@ -121,6 +135,42 @@ header img {
   border: none;
   text-align: center;
   font-weight: 600;
+}
+
+.profile-section {
+  margin-left: 20px;
+}
+
+.notifications {
+  position: relative;
+}
+
+.notification-bell {
+  margin-left: 10px;
+  font-size: 1.4rem;
+}
+
+.notification-number {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  background-color: #e50914;
+  top:0;
+  right:0;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.notification-number span {
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.search-icon {
+  font-size: 1.2rem;
 }
 
 /* MOVIE AND TV SECTION */

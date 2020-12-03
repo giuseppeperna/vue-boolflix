@@ -27,7 +27,7 @@
 
           <!-- Header Logo -->
           <div class="container-flex flex-row center-items">
-            <img src="img/netflix-text.png" alt="logo-text">
+            <img class="logo" src="img/netflix-text.png" alt="logo-text">
             <div class="container container-flex flex-row center-items">
               <ul class="nav-menu">
                 <a class="white-text" href="#"><li>Home</li></a>
@@ -41,8 +41,8 @@
           
 
           <!-- Header search bar -->
-          <div class="search-bar">
-            <input type="text" placeholder="Cerca Film e Serie Tv" v-model="search" @keypress.enter="searchMovie(), searchTvShow()" value="">
+          <div class="search-bar container-flex flex-row center-items">
+            <input type="text" placeholder="Film e Serie TV" v-model="search" @keypress.enter="searchMovie(), searchTvShow()" value="">
 
             <!-- Genres Select -->
             <select name="genres" id="" v-model="selectedGenre">
@@ -50,7 +50,17 @@
               <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
             </select>
             <!-- Search button -->
-            <button @click="searchMovie(), searchTvShow()">Cerca</button>
+            <a class="search-icon" href="#" @click="searchMovie(), searchTvShow()"><i class="fas fa-search white-text"></i></a>
+            <!-- Notifications and profile -->
+            <div class="profile-section container-flex flex-row center-items">
+              <h4 class="white-text">KIDS</h4>
+              <div class="notifications">
+                <a href="#" class="notification-bell"><i class="fas fa-bell white-text"></i></a>
+                <div class="notification-number"><span class="white-text">1</span></div>
+              </div>
+              <img src="img/profile.jpg" alt="profile">
+              <a href="#" class="chevron white-text"><i class="fas fa-chevron-down"></i></a>
+            </div>
           </div>
         </div>
       </header>
