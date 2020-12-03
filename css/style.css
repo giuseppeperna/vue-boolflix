@@ -5,7 +5,7 @@
 }
 
 body {
-  background: #1E2D3B;
+  background: #161616;
   background-image: url("../img/netflix-text.png");
   background-repeat: no-repeat;
   background-position: 50%;
@@ -52,7 +52,16 @@ body {
 /* COLOURS */
 
 .white-text {
-  color:#FFF;
+  color:rgb(233, 233, 233);
+}
+
+/* TYPOGRAPHY */
+
+.text-ellipsis {
+  display: -webkit-box;   
+   -webkit-line-clamp: 5;   
+   -webkit-box-orient: vertical;     
+   overflow: hidden; 
 }
 
 /* HEADER */
@@ -67,10 +76,25 @@ body {
 header {
   width: 100%;
   height: 70px;
-  background: rgb(46, 58, 70);
+  background: rgb(19, 20, 20);
 }
 header img {
-  width: 80px;
+  width: 120px;
+  margin-right: 40px;
+}
+
+.nav-menu li {
+  display: inline;
+  margin: 0 10px;
+  font-weight: 600;
+}
+
+.nav-menu a {
+  text-decoration: none;
+}
+
+.nav-menu a:hover {
+  color: #e50914;
 }
 
 .search-bar input {
@@ -105,7 +129,7 @@ header img {
   width: 100%;
   margin: 50px 0 0 0;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .movie-container {
@@ -120,38 +144,72 @@ header img {
   justify-content: flex-start;
   flex-direction: column;
   flex-basis: 220px;
-  margin: 10px 20px;
-  background-color: rgba(0,0,0,0.6);
-  text-align: center;
-  padding:5px 5px 15px 5px;
+  margin: 10px 2px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.movie img {
-  width: 100%;
 }
 
 .movie h3 {
   margin: 20px 0 10px 0;
   color: white;
   font-size: 1rem;
-  text-transform: uppercase;
+  text-transform: uppercase; 
+   -webkit-line-clamp: 3;   
 }
 
 .movie span.original-title {
   color: grey;
   font-size: 0.8rem;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 10px;  
+   -webkit-line-clamp: 3;   
 }
 
-.movie span.year, .movie span.vote {
+.movie span.language, .movie span.vote {
   color: grey;
   margin-top: 10px;
   font-weight: 600;
 }
 
-.uppercase {
-  text-transform: uppercase;
+.movie .overview {
+  margin-top: 10px;
+   -webkit-line-clamp: 5;   
+}
+
+.movie-info {
+  width: 220px;
+  height: 330px;
+  position: absolute;
+  background-color:rgba(0,0,0,0.8);
+  opacity: 0;
+  justify-content: flex-start;
+  padding: 0px 15px;
+}
+
+.movie-info:hover {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.poster {
+  width: 100%;
+  height: 330px;
+  position: relative;
+}
+
+.stars {
+  color: yellow;
+  position: relative;
+  left: 3px;
+}
+
+.empty-stars {
+  color: rgb(70, 70, 70) ;
+  margin: 0;
+}
+
+.flags {
+  width:35px;
+  text-align: center;
+  margin-top: 15px;
 }

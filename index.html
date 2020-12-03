@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <!-- FONT-AWESOME -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -18,40 +18,69 @@
   </head>
   <body>
 
-    <!-- Vue App section -->
+    <!-- VUE APP SECTION -->
     <div id="boolFlix">
       
       <!-- Logo and search bar -->
       <header>
         <div class="header-container container-flex flex-row center-items justify-space-between">
+
+          <!-- Header Logo -->
           <div class="container-flex flex-row center-items">
-            <img src="img/netflix-logo.png" alt="logo">
             <img src="img/netflix-text.png" alt="logo-text">
+            <div class="container container-flex flex-row center-items">
+              <ul class="nav-menu">
+                <a class="white-text" href="#"><li>Home</li></a>
+                <a class="white-text" href="#"><li>Serie Tv</li></a>
+                <a class="white-text" href="#"><li>Film</li></a>
+                <a class="white-text" href="#"><li>Aggiunti di recente</li></a>
+                <a class="white-text" href="#"><li>La mia lista</li></a>
+              </ul>
+            </div>
           </div>
+          
+
+          <!-- Header search bar -->
           <div class="search-bar">
-            <input type="text" placeholder="Cerca Film" v-model="search" @keypress.enter="searchMovie()" value="">
+            <input type="text" placeholder="Cerca Film e Serie Tv" v-model="search" @keypress.enter="searchMovie(), searchTvShow()" value="">
+
+            <!-- Genres Select -->
             <select name="genres" id="" v-model="selectedGenre">
               <option value="all">All</option>
               <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
             </select>
-            <button @click="searchMovie()">Cerca</button>
+            <!-- Search button -->
+            <button @click="searchMovie(), searchTvShow()">Cerca</button>
           </div>
         </div>
       </header>
 
+      <!-- Search results infos -->
       <div class="search-result">
-        <h1 class="white-text" v-if="movies.length > 0">Risultati per: {{searchResult[0]}}</h1>
-        <p class="white-text" v-if="movies.length > 0">Film trovati: {{filterMovies.length}}</p>
+        <h1 class="white-text" v-if="movies.length > 0">Ricerca: {{searchResult[0]}}</h1>
+        <p class="white-text" v-if="movies.length > 0">Risultati: {{totalResults}}</p>
       </div>
       
-      <!-- Movie and tv show section -->
+      <!-- MOVIES AND TV SHOWS SECTION -->
       <div class="movie-container container">
+
+        <!-- Movies and TV Shows card template -->
         <div class="movie" v-for="(movie, index) in filterMovies">
-          <img v-bind:src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
-          <h3>{{movie.title}}</h3>
-          <span class="original-title">{{movie.original_title}}</span>
-          <span class="year">Lingua: <span class="uppercase">{{movie.original_language}}</span></span>
-          <span class="vote">Voto: {{movie.vote_average}}</span>
+          <!-- Poster -->
+          <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+          <!-- Movies and TV Shows infos -->
+          <div class="movie-info container-flex flex-column">
+            <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+            <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+            <div>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+            </div>
+            <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+            <div class="container-flex row justify-center">
+              <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+            </div>
+          </div>
         </div>
       </div>
     </div>
