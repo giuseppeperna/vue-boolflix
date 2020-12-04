@@ -207,7 +207,7 @@ header {
   justify-content: flex-start;
   flex-wrap: nowrap;
   overflow: hidden;
-  padding: 10px 0 60px 0;
+  padding: 10px 0 10px 0;
   position: relative;
   z-index: 1;
 }
@@ -234,7 +234,7 @@ header {
 }
 
 .title-section {
-  margin-left: 20px
+  margin: 50px 0 0 20px;
   
 }
 
