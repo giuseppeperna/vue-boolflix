@@ -54,6 +54,10 @@ body {
   color:rgb(233, 233, 233);
 }
 
+.red-text {
+  color: #e50914;
+}
+
 /* TYPOGRAPHY */
 
 .text-ellipsis {
@@ -80,6 +84,7 @@ header {
 .logo {
   width: 120px;
   margin-right: 40px;
+  cursor: pointer;
 }
 
 .nav-menu li {
@@ -114,10 +119,11 @@ header {
 .search-bar input {
   height: 30px;
   width: 120px;
-  border-radius: 5px;
   border: none;
   padding-left: 10px;
-  font-weight: 600;
+  background-color: black;
+  border: 1px solid white;
+  color:rgb(233, 233, 233);
 }
 
 .search-bar button {
@@ -129,12 +135,12 @@ header {
   font-weight: 600;
 }
 
-.search-bar select {
+.search-options select {
   height: 30px;
-  border-radius: 5px;
-  border: none;
+  background-color: black;
+  border: 1px solid white;
+  color:rgb(233, 233, 233);
   text-align: center;
-  font-weight: 600;
 }
 
 .profile-section {
@@ -177,10 +183,11 @@ header {
 
 /* MOVIE AND TV SECTION */
 
-.search-result {
-  width: 100%;
+.search-options {
   margin: 50px 0 0 0;
-  text-align: center;
+}
+
+.search-result {
   font-size: 1rem;
 }
 

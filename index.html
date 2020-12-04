@@ -27,12 +27,12 @@
 
           <!-- Header Logo -->
           <div class="container-flex flex-row center-items">
-            <img class="logo" src="img/netflix-text.png" alt="logo-text">
+            <img class="logo" src="img/netflix-text.png" alt="logo-text" @click="homepageRefresh()">
             <div class="container container-flex flex-row center-items">
               <ul class="nav-menu">
                 <a class="white-text" href="#" @click="homepageRefresh()"><li>Home</li></a>
-                <a class="white-text" href="#"><li>Serie Tv</li></a>
-                <a class="white-text" href="#"><li>Film</li></a>
+                <a class="white-text" href="#" @click="isActiveTv()"><li>Serie Tv</li></a>
+                <a class="white-text" href="#" @click="isActiveMovie()"><li>Film</li></a>
                 <a class="white-text" href="#"><li>Aggiunti di recente</li></a>
                 <a class="white-text" href="#"><li>La mia lista</li></a>
               </ul>
@@ -43,12 +43,6 @@
           <!-- Header search bar -->
           <div class="search-bar container-flex flex-row center-items">
             <input type="text" placeholder="Film e Serie TV" v-model="search" @keypress.enter="searchMovie(), searchTvShow()" value="">
-
-            <!-- Genres Select -->
-            <select name="genres" id="" v-model="selectedGenre">
-              <option value="all">All</option>
-              <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
-            </select>
             <!-- Search button -->
             <a class="search-icon" href="#" @click="searchMovie(), searchTvShow()"><i class="fas fa-search white-text"></i></a>
             <!-- Notifications and profile -->
@@ -65,17 +59,33 @@
         </div>
       </header>
 
-      <!-- Search results infos -->
-      <div class="search-result">
-        <h1 class="white-text" v-if="movies.length > 0">Ricerca: {{searchResult[0]}}</h1>
-        <p class="white-text" v-if="movies.length > 0">Risultati: {{totalResults}}</p>
+      <div class="search-options container-flex flex-row center-items justify-space-around" v-if="movies.length > 0">
+         <!-- Search results infos -->
+        <div class="search-result">
+          <h1 class="white-text">Ricerca: {{searchResult[0]}}</h1>
+        </div>
+        <!-- Genres Select -->
+        <div>
+          <label for="tutto" class="white-text">Tutto</label>
+          <input type="radio" id="tutto" name="tutto" value="tutto" v-model="checkedCategory">
+          <label for="serie-tv" class="white-text">Serie Tv</label>
+          <input type="radio" id="serie-tv" name="serie-tv" value="serie-tv" v-model="checkedCategory">
+          <label for="film" class="white-text">Film</label>
+          <input type="radio" id="film" name="film" value="film" v-model="checkedCategory">
+          <select name="genres" id="" v-model="selectedGenre">
+            <option value="all">All</option>
+            <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+          </select>
+        </div>
+        
       </div>
       
       <!-- MOVIES AND TV SHOWS SECTION -->
 
+      <!-- LANDING PAGE -->
       <!-- Top rated movies -->
-      <h1 class="title-section white-text" v-if="movies.length < 1">I film più popolari</h1>
-      <div class="home-sections" v-if="movies.length < 1">
+      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">I film più popolari</h1>
+      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-films">
           <div class="movie" v-for="(movie, index) in topRatedMovies">
             <!-- Poster -->
@@ -102,8 +112,8 @@
       </div>
 
       <!-- Top rated TV Shows -->
-      <h1 class="title-section white-text" v-if="movies.length < 1">Le serie tv del momento</h1>
-      <div class="home-sections" v-if="movies.length < 1">
+      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Le serie tv del momento</h1>
+      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-shows">
           <div class="movie" v-for="(movie, index) in topRatedTvShows">
             <!-- Poster -->
@@ -130,8 +140,8 @@
       </div>
 
       <!-- Upcoming -->
-      <h1 class="title-section white-text" v-if="movies.length < 1">Ultime uscite</h1>
-      <div class="home-sections" v-if="movies.length < 1">
+      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Ultime uscite</h1>
+      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container upcoming">
           <div class="movie" v-for="(movie, index) in upcoming">
             <!-- Poster -->
@@ -154,6 +164,54 @@
         <div class="slider container-flex flex-row center-items justify-space-between">
           <i class="fas fa-chevron-left white-text" @click="scrollLeft('.upcoming')"></i>
           <i class="fas fa-chevron-right white-text" @click="scrollRight('.upcoming')"></i>
+        </div>
+      </div>
+
+      <!-- TV SHOWS SECTION -->
+      <h1 class="title-section white-text" v-if="isActiveShows">Serie Tv</h1>
+      <div class="movie-container" v-if="isActiveShows">
+
+        <!-- Movies and TV Shows card template -->
+        <div class="movie" v-for="(movie, index) in topRatedTvShows">
+          <!-- Poster -->
+          <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+          <!-- Movies and TV Shows infos -->
+          <div class="movie-info container-flex flex-column">
+            <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+            <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+            <div>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+            </div>
+            <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+            <div class="container-flex row justify-center">
+              <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOVIES SECTION -->
+      <h1 class="title-section white-text" v-if="isActiveTopRatedMovies">Film</h1>
+      <div class="movie-container" v-if="isActiveTopRatedMovies">
+
+        <!-- Movies and TV Shows card template -->
+        <div class="movie" v-for="(movie, index) in topRatedMovies">
+          <!-- Poster -->
+          <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
+          <!-- Movies and TV Shows infos -->
+          <div class="movie-info container-flex flex-column">
+            <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
+            <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
+            <div>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+            </div>
+            <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
+            <div class="container-flex row justify-center">
+              <img class="flags" v-bind:src="'img/' + movie.original_language + '.png'" alt="" onerror="this.src='img/white-flag.png'">
+            </div>
+          </div>
         </div>
       </div>
 

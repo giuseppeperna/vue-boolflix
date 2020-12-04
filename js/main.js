@@ -60,17 +60,21 @@ const boolFlix = new Vue({
     el: '#boolFlix',
     data: {
         movies:[],
+        tvShows:[],
+        people:[],
+        multiSearch:[],
         topRatedMovies:[],
+        isActiveTopRatedMovies:false,
+        isActiveShows:false,
         topRatedTvShows:[],
         upcoming:[],
-        tvShows:[],
         genres:[],
         search:"",
         searchResult:[],
         totalPages:null,
-        totalResults:null,
         selectedPage:1,
         selectedGenre:"all",
+        checkedCategory:"tutto"
     },
     mounted() { // API call to get movie and tv shows infos
         axios.get("https://api.themoviedb.org/3/genre/movie/list", {
@@ -105,7 +109,8 @@ const boolFlix = new Vue({
             }
         }).then(result => {
             this.upcoming= result.data.results;
-        })
+        }),
+        this.infinteScroll(this.selectedPage);
      },
     methods: {
         searchMovie() { 
@@ -113,15 +118,16 @@ const boolFlix = new Vue({
                 params: {
                     'api_key': API_KEY,
                     query: this.search,
-                    page: this.selectedPage,
                     language:"it-IT",
                 }
             }).then(result => {
                 this.movies = result.data.results;
+                this.multiSearch = result.data.results;
                 this.searchResult = [this.search];
-                this.search ="";
+                this.selectedPage = 1
                 this.totalPages = result.data.total_pages;
-                this.totalResults = result.data.total_results;
+                this.isActiveTopRatedMovies = false;
+                this.isActiveShows = false;
             }).catch(()=> this.movies = []);
         },
         searchTvShow() {
@@ -129,14 +135,26 @@ const boolFlix = new Vue({
                 params: {
                     'api_key': API_KEY,
                     query: this.search,
-                    page: this.selectedPage,
                     language:"it-IT",
                 }
             }).then(result => {
                 this.tvShows = result.data.results;
-                this.movies = [...this.movies.concat(this.tvShows)]
-                this.totalResults += result.data.total_results;
-            })
+                this.multiSearch = [...this.multiSearch.concat(this.tvShows)]
+                this.isActiveTopRatedMovies = false;
+                this.isActiveShows = false;
+            }).catch(()=> this.movies = []);
+        },
+        searchPeople() {
+            axios.get("https://api.themoviedb.org/3/search/person", {
+                params: {
+                    'api_key': API_KEY,
+                    query: this.search,
+                    language:"it-IT",
+                }
+            }).then(result => {
+                this.people = result.data.results;
+                this.movies = [...this.movies.concat(this.people)]
+            }).catch(()=> this.movies = []);
         },
         scrollRight(target) {
             let content = document.querySelector(target);
@@ -149,16 +167,70 @@ const boolFlix = new Vue({
         homepageRefresh() {
             this.movies = [];
             this.search ="";
+            this.selectedPage = 1;
+            this.isActiveTopRatedMovies = false;
+            this.isActiveShows = false;
+        },
+        infinteScroll() {
+            window.onscroll = () => {
+            let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight; 
+
+            if (bottomOfWindow) {
+                axios.get("https://api.themoviedb.org/3/search/movie", {
+                    params: {
+                        'api_key': API_KEY,
+                        query: this.search,
+                        page: this.selectedPage + 1,
+                        language:"it-IT",
+                    }
+                }).then(result => {
+                    this.selectedPage++
+                    this.multiSearch =[...this.multiSearch.concat(result.data.results)];                 
+                }).catch(()=> this.movies = []);
+
+                axios.get("https://api.themoviedb.org/3/search/tv", {
+                    params: {
+                        'api_key': API_KEY,
+                        query: this.search,
+                        page: this.selectedPage + 1,
+                        language:"it-IT",
+                    }
+                }).then(result => {
+                    this.selectedPage++
+                    this.multiSearch = [...this.multiSearch, ...result.data.results];
+                }).catch(()=> this.movies = []);
+            }
+            }
+        },
+        isActiveTv() {
+            this.isActiveShows = true;
+            this.isActiveTopRatedMovies = false;
+            this.multiSearch = [];
+            this.search ="";
+        },
+        isActiveMovie() {
+            this.isActiveShows = false;
+            this.isActiveTopRatedMovies = true;
+            this.multiSearch = [];
+            this.search ="";
         }
     },
     computed: { 
         filterMovies() {
             if (this.selectedGenre !== 'all') {
-                return this.movies.filter (movie => {
+                return this.multiSearch.filter (movie => {
                     return movie.genre_ids.includes(this.selectedGenre);
-                })
-            } else {
-                return this.movies;
+                });
+            }else if (this.checkedCategory === "film"){
+                return this.multiSearch.filter ((movie) => {
+                    return this.movies.includes(movie);
+                });
+            }else if (this.checkedCategory === "serie-tv") {
+                return this.multiSearch.filter ((movie) => {
+                    return this.tvShows.includes(movie);
+                });
+            }else {
+                return this.multiSearch;
             }
         },
       }
