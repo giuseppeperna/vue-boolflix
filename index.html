@@ -59,7 +59,7 @@
         </div>
       </header>
 
-      <div class="search-options container-flex flex-row center-items justify-space-around" v-if="movies.length > 0">
+      <div class="search-options container-flex flex-row center-items justify-space-around" v-if="multiSearch.length > 0">
          <!-- Search results infos -->
         <div class="search-result">
           <h1 class="white-text">Ricerca: {{searchResult[0]}}</h1>
@@ -72,10 +72,6 @@
           <input type="radio" id="serie-tv" name="serie-tv" value="serie-tv" v-model="checkedCategory">
           <label for="film" class="white-text">Film</label>
           <input type="radio" id="film" name="film" value="film" v-model="checkedCategory">
-          <select name="genres" id="" v-model="selectedGenre">
-            <option value="all">All</option>
-            <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
-          </select>
         </div>
         
       </div>
@@ -168,11 +164,18 @@
       </div>
 
       <!-- TV SHOWS SECTION -->
-      <h1 class="title-section white-text" v-if="isActiveShows">Serie Tv</h1>
+      <div class="container-flex flex-row center-items">
+        <h1 class="title-section white-text" v-if="isActiveShows">Serie Tv</h1>
+        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveShows">
+          <option value="all">Generi</option>
+          <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+        </select>
+      </div>
+      
       <div class="movie-container" v-if="isActiveShows">
 
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in topRatedTvShows">
+        <div class="movie" v-for="(movie, index) in filterTvShows">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->
@@ -192,11 +195,18 @@
       </div>
 
       <!-- MOVIES SECTION -->
-      <h1 class="title-section white-text" v-if="isActiveTopRatedMovies">Film</h1>
+      <div class="container-flex flex-row center-items">
+        <h1 class="title-section white-text" v-if="isActiveTopRatedMovies">Film</h1>
+        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveTopRatedMovies">
+          <option value="all">Generi</option>
+          <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+        </select>
+      </div>
+      
       <div class="movie-container" v-if="isActiveTopRatedMovies">
 
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in topRatedMovies">
+        <div class="movie" v-for="(movie, index) in filterMovies">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->
@@ -218,7 +228,7 @@
       <div class="movie-container">
 
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in filterMovies">
+        <div class="movie" v-for="(movie, index) in filterByCategory">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->

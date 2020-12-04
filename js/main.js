@@ -128,7 +128,10 @@ const boolFlix = new Vue({
                 this.totalPages = result.data.total_pages;
                 this.isActiveTopRatedMovies = false;
                 this.isActiveShows = false;
-            }).catch(()=> this.movies = []);
+            }).catch(()=> {
+                this.multiSearch = [];
+                this.homepageRefresh();
+            });
         },
         searchTvShow() {
             axios.get("https://api.themoviedb.org/3/search/tv", {
@@ -142,7 +145,10 @@ const boolFlix = new Vue({
                 this.multiSearch = [...this.multiSearch.concat(this.tvShows)]
                 this.isActiveTopRatedMovies = false;
                 this.isActiveShows = false;
-            }).catch(()=> this.movies = []);
+            }).catch(()=> {
+                this.multiSearch = [];
+                this.homepageRefresh();
+            });
         },
         searchPeople() {
             axios.get("https://api.themoviedb.org/3/search/person", {
@@ -218,20 +224,34 @@ const boolFlix = new Vue({
     computed: { 
         filterMovies() {
             if (this.selectedGenre !== 'all') {
-                return this.multiSearch.filter (movie => {
+                return this.topRatedMovies.filter (movie => {
                     return movie.genre_ids.includes(this.selectedGenre);
-                });
-            }else if (this.checkedCategory === "film"){
+                })
+            } else {
+                return this.topRatedMovies;
+            }
+        },
+        filterTvShows() {
+            if (this.selectedGenre !== 'all') {
+                return this.topRatedTvShows.filter (movie => {
+                    return movie.genre_ids.includes(this.selectedGenre);
+                })
+            } else {
+                return this.topRatedTvShows;
+            }
+        },
+        filterByCategory() {
+            if (this.checkedCategory === "film") {
                 return this.multiSearch.filter ((movie) => {
                     return this.movies.includes(movie);
-                });
-            }else if (this.checkedCategory === "serie-tv") {
+                })
+            }else if (this.checkedCategory === "serie-tv"){
                 return this.multiSearch.filter ((movie) => {
                     return this.tvShows.includes(movie);
                 });
             }else {
                 return this.multiSearch;
             }
-        },
+        }
       }
 });
