@@ -80,8 +80,8 @@
 
       <!-- LANDING PAGE -->
       <!-- Top rated movies -->
-      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">I film più popolari</h1>
-      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">I film più popolari</h1>
+      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-films">
           <div class="movie" v-for="(movie, index) in topRatedMovies">
             <!-- Poster -->
@@ -108,8 +108,8 @@
       </div>
 
       <!-- Top rated TV Shows -->
-      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Le serie tv del momento</h1>
-      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Le serie tv del momento</h1>
+      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-shows">
           <div class="movie" v-for="(movie, index) in topRatedTvShows">
             <!-- Poster -->
@@ -136,8 +136,8 @@
       </div>
 
       <!-- Upcoming -->
-      <h1 class="title-section white-text" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Ultime uscite</h1>
-      <div class="home-sections" v-if="movies.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Ultime uscite</h1>
+      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container upcoming">
           <div class="movie" v-for="(movie, index) in upcoming">
             <!-- Poster -->

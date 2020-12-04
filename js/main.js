@@ -124,10 +124,11 @@ const boolFlix = new Vue({
                 this.movies = result.data.results;
                 this.multiSearch = result.data.results;
                 this.searchResult = [this.search];
-                this.selectedPage = 1
+                this.selectedPage = 1;
                 this.totalPages = result.data.total_pages;
                 this.isActiveTopRatedMovies = false;
                 this.isActiveShows = false;
+                this.checkedCategory = "all"
             }).catch(()=> {
                 this.multiSearch = [];
                 this.homepageRefresh();
@@ -142,9 +143,12 @@ const boolFlix = new Vue({
                 }
             }).then(result => {
                 this.tvShows = result.data.results;
-                this.multiSearch = [...this.multiSearch.concat(this.tvShows)]
+                this.multiSearch = [...this.multiSearch.concat(this.tvShows)];
+                this.selectedPage = 1
+                this.totalPages = result.data.total_pages;
                 this.isActiveTopRatedMovies = false;
                 this.isActiveShows = false;
+                this.checkedCategory = "all"
             }).catch(()=> {
                 this.multiSearch = [];
                 this.homepageRefresh();
@@ -171,7 +175,7 @@ const boolFlix = new Vue({
             content.scrollLeft -= 200;
           },
         homepageRefresh() {
-            this.movies = [];
+            this.multiSearch = [];
             this.search ="";
             this.selectedPage = 1;
             this.isActiveTopRatedMovies = false;
