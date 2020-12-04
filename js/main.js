@@ -43,11 +43,13 @@ aggiuntive già prese nei punti precedenti più la overview.
  2) Campo cerca nel quale inserire il titolo del film e pulsante (oppure il tasto enter) per attivare la ricerca nell'API.
  3) Se il campo input è vuoto, il tasto cerca concella la ricerca precedente.
  4) Nel caso in cui un immagine non fosse disponibile, viene visualizzata un'immagine alternativa.
- 5) Possibilità di ricercare il titolo del film con un filtro in base al genere.
+ 5) Possibilità di filtrare le ricerche in base ai film o alle serie tv.
  6) Per indicare la lingua del film o della serie tv, viene mostrata la bandierina del paese. Una bandiera alternativa
  viene mostrata per quelle mancanti.
  7) Per ogni titolo, tramite hover vengono mostrate tutte le info riguardanti il film o la serie tv.
  8) Diverse sezioni con film e serie tv nella hompage, con slider per scorrere tra i titoli.
+ 9) Sezione film e sezione serie tv con possibilità di filtro in base al genere.
+ 10) Infinite Scroll per visualizzare tutte le pagine dei risultati.
 
  @author Giuseppe Perna <giuseppeperna.cg@gmail.com>
  */
@@ -64,10 +66,12 @@ const boolFlix = new Vue({
         people:[],
         multiSearch:[],
         topRatedMovies:[],
+        moviePopular:[],
+        tvPopular:[],
+        upcoming:[],
         isActiveTopRatedMovies:false,
         isActiveShows:false,
         topRatedTvShows:[],
-        upcoming:[],
         genres:[],
         search:"",
         searchResult:[],
@@ -84,6 +88,7 @@ const boolFlix = new Vue({
         }).then(result => {
             this.genres= result.data.genres;
         }),
+
         axios.get("https://api.themoviedb.org/3/discover/movie", {
             params: {
                 'api_key': API_KEY,
@@ -93,6 +98,7 @@ const boolFlix = new Vue({
         }).then(result => {
             this.topRatedMovies= result.data.results;
         }),
+
         axios.get("https://api.themoviedb.org/3/discover/tv", {
             params: {
                 'api_key': API_KEY,
@@ -102,6 +108,7 @@ const boolFlix = new Vue({
         }).then(result => {
             this.topRatedTvShows= result.data.results;
         }),
+
         axios.get("https://api.themoviedb.org/3/movie/upcoming", {
             params: {
                 'api_key': API_KEY,
@@ -109,6 +116,24 @@ const boolFlix = new Vue({
             }
         }).then(result => {
             this.upcoming= result.data.results;
+        }),
+
+        axios.get("https://api.themoviedb.org/3/movie/popular", {
+            params: {
+                'api_key': API_KEY,
+                language:"it-IT",
+            }
+        }).then(result => {
+            this.moviePopular= result.data.results;
+        }),
+
+        axios.get("https://api.themoviedb.org/3/tv/popular", {
+            params: {
+                'api_key': API_KEY,
+                language:"it-IT",
+            }
+        }).then(result => {
+            this.tvPopular= result.data.results;
         }),
         this.infinteScroll(this.selectedPage);
      },
@@ -181,7 +206,7 @@ const boolFlix = new Vue({
             this.isActiveTopRatedMovies = false;
             this.isActiveShows = false;
         },
-        infinteScroll() {
+        infinteScroll() { //Load next results page when the scroll bar reaches the bottom
             window.onscroll = () => {
             let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight; 
 
@@ -196,7 +221,7 @@ const boolFlix = new Vue({
                 }).then(result => {
                     this.selectedPage++
                     this.multiSearch =[...this.multiSearch.concat(result.data.results)];                 
-                }).catch(()=> this.movies = []);
+                }).catch(()=> this.multiSearch = []);
 
                 axios.get("https://api.themoviedb.org/3/search/tv", {
                     params: {
@@ -208,7 +233,31 @@ const boolFlix = new Vue({
                 }).then(result => {
                     this.selectedPage++
                     this.multiSearch = [...this.multiSearch, ...result.data.results];
-                }).catch(()=> this.movies = []);
+                }).catch(()=> this.multiSearch = []);
+
+                axios.get("https://api.themoviedb.org/3/movie/popular", {
+                    params: {
+                        'api_key': API_KEY,
+                        'sort_by': 'popularity.desc',
+                        page: this.selectedPage + 1,
+                        language:"it-IT",
+                    }
+                }).then(result => {
+                    this.selectedPage++
+                    this.moviePopular= [...this.moviePopular.concat(result.data.results)];
+                }).catch(()=> this.multiSearch = []);
+
+                axios.get("https://api.themoviedb.org/3/tv/popular", {
+                    params: {
+                        'api_key': API_KEY,
+                        'sort_by': 'popularity.desc',
+                        page: this.selectedPage + 1,
+                        language:"it-IT",
+                    }
+                }).then(result => {
+                    this.selectedPage++
+                    this.tvPopular= [...this.tvPopular.concat(result.data.results)];
+                }).catch(()=> this.multiSearch = []);
             }
             }
         },
@@ -228,20 +277,20 @@ const boolFlix = new Vue({
     computed: { 
         filterMovies() {
             if (this.selectedGenre !== 'all') {
-                return this.topRatedMovies.filter (movie => {
+                return this.moviePopular.filter (movie => {
                     return movie.genre_ids.includes(this.selectedGenre);
                 })
             } else {
-                return this.topRatedMovies;
+                return this.moviePopular;
             }
         },
         filterTvShows() {
             if (this.selectedGenre !== 'all') {
-                return this.topRatedTvShows.filter (movie => {
+                return this.tvPopular.filter (movie => {
                     return movie.genre_ids.includes(this.selectedGenre);
                 })
             } else {
-                return this.topRatedTvShows;
+                return this.tvPopular;
             }
         },
         filterByCategory() {
