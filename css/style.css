@@ -14,6 +14,10 @@ body {
   font-size: 15px;
 }
 
+#boolFlix {
+  min-width: 1130px;
+}
+
 /* COMMON */
 
 .container-flex {
@@ -56,6 +60,10 @@ body {
 
 .red-text {
   color: #e50914;
+}
+
+.grey-text {
+  color:rgb(68, 68, 68)
 }
 
 /* TYPOGRAPHY */
@@ -146,6 +154,7 @@ header {
 
 .profile-section {
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .notifications {
@@ -190,6 +199,16 @@ header {
 
 .search-result {
   font-size: 1rem;
+}
+
+.search-options i {
+  font-size: 1.2rem;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.search-options span {
+  font-size: 1.2rem;
 }
 
 .search-options input {

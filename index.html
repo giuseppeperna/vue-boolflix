@@ -2,6 +2,9 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="img/netflix-logo.png" type="image/x-icon">
+
     <!-- FONT-AWESOME -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
 
@@ -42,9 +45,9 @@
 
           <!-- Header search bar -->
           <div class="search-bar container-flex flex-row center-items">
-            <input type="text" placeholder="Film e Serie TV" v-model="search" @keypress.enter="searchMovie(), searchTvShow()" value="">
+            <input type="text" placeholder="Film e Serie TV" v-model="search" @keypress.enter="searchMovie(), searchTvShow(), searchPeople()" value="">
             <!-- Search button -->
-            <a class="search-icon" href="#" @click="searchMovie(), searchTvShow()"><i class="fas fa-search white-text"></i></a>
+            <a class="search-icon" href="#" @click="searchMovie(), searchTvShow(), searchPeople()"><i class="fas fa-search white-text"></i></a>
             <!-- Notifications and profile -->
             <div class="profile-section container-flex flex-row center-items">
               <h4 class="white-text">KIDS</h4>
@@ -59,19 +62,25 @@
         </div>
       </header>
 
-      <div class="search-options container-flex flex-row center-items justify-space-around" v-if="multiSearch.length > 0">
+      <div class="search-options container-flex flex-row center-items justify-space-around" v-if="search !== ''">
          <!-- Search results infos -->
         <div class="search-result">
-          <h1 class="white-text">Ricerca: {{searchResult[0]}}</h1>
+          <h1 class="white-text">Ricerca: {{search}}</h1>
+          <p class="white-text" v-if="searchResult.length > 0">Pagine totali: {{totalPages}}</p>
+        </div>
+        <div v-if="searchResult.length > 0">
+          <i class="fas fa-backward grey-text" @click="firstPage()"></i>
+          <i class="fas fa-step-backward grey-text" @click="previousPage()"></i>
+          <span class="white-text">{{elementPage}}</span>
+          <i class="fas fa-step-forward grey-text" @click="nextPage()"></i>
+          <i class="fas fa-forward grey-text" @click="lastPage()"></i>
         </div>
         <!-- Genres Select -->
         <div>
-          <label for="tutto" class="white-text">Tutto</label>
-          <input type="radio" id="tutto" name="tutto" value="tutto" v-model="checkedCategory">
-          <label for="serie-tv" class="white-text">Serie Tv</label>
-          <input type="radio" id="serie-tv" name="serie-tv" value="serie-tv" v-model="checkedCategory">
           <label for="film" class="white-text">Film</label>
           <input type="radio" id="film" name="film" value="film" v-model="checkedCategory">
+          <label for="serie-tv" class="white-text">Serie Tv</label>
+          <input type="radio" id="serie-tv" name="serie-tv" value="serie-tv" v-model="checkedCategory">
         </div>
         
       </div>
@@ -80,10 +89,10 @@
 
       <!-- LANDING PAGE -->
       <!-- Top rated movies -->
-      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">I film più popolari</h1>
-      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">I film più popolari</h1>
+      <div class="home-sections" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-films">
-          <div class="movie" v-for="(movie, index) in topRatedMovies">
+          <div class="movie" v-for="(movie, index) in topRatedMovies" :key="movie.id">
             <!-- Poster -->
             <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
             <!-- Movies and TV Shows infos -->
@@ -91,8 +100,8 @@
               <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
               <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
               <div>
-                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
               </div>
               <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
               <div class="container-flex row justify-center">
@@ -108,10 +117,10 @@
       </div>
 
       <!-- Top rated TV Shows -->
-      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Le serie tv del momento</h1>
-      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">Le serie tv del momento</h1>
+      <div class="home-sections" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container popular-shows">
-          <div class="movie" v-for="(movie, index) in topRatedTvShows">
+          <div class="movie" v-for="(movie, index) in topRatedTvShows" :key="movie.id">
             <!-- Poster -->
             <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
             <!-- Movies and TV Shows infos -->
@@ -119,8 +128,8 @@
               <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
               <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
               <div>
-                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
               </div>
               <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
               <div class="container-flex row justify-center">
@@ -136,10 +145,10 @@
       </div>
 
       <!-- Upcoming -->
-      <h1 class="title-section white-text" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">Ultime uscite</h1>
-      <div class="home-sections" v-if="multiSearch.length < 1 && !isActiveTopRatedMovies && !isActiveShows">
+      <h1 class="title-section white-text" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">Ultime uscite</h1>
+      <div class="home-sections" v-if="!search && !isActiveTopRatedMovies && !isActiveShows">
         <div class="home-sections home-sections-container upcoming">
-          <div class="movie" v-for="(movie, index) in upcoming">
+          <div class="movie" v-for="(movie, index) in upcoming" :key="movie.id">
             <!-- Poster -->
             <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
             <!-- Movies and TV Shows infos -->
@@ -147,8 +156,8 @@
               <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
               <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
               <div>
-                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+                <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+                <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
               </div>
               <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
               <div class="container-flex row justify-center">
@@ -165,17 +174,17 @@
 
       <!-- TV SHOWS SECTION -->
       <div class="container-flex flex-row center-items">
-        <h1 class="title-section white-text" v-if="isActiveShows">Serie Tv</h1>
-        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveShows">
+        <h1 class="title-section white-text" v-if="isActiveShows && !search">Serie Tv</h1>
+        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveShows && !search">
           <option value="all">Generi</option>
-          <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+          <option v-bind:value="genre.id" v-for="(genre, index) in genres" :key="genre.id">{{genre.name}}</option>
         </select>
       </div>
       
-      <div class="movie-container" v-if="isActiveShows">
+      <div class="movie-container" v-if="isActiveShows && !search">
 
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in filterTvShows">
+        <div class="movie" v-for="(movie, index) in filterTvShows" :key="movie.id">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->
@@ -183,8 +192,8 @@
             <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
             <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
             <div>
-              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
             </div>
             <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
             <div class="container-flex row justify-center">
@@ -196,17 +205,17 @@
 
       <!-- MOVIES SECTION -->
       <div class="container-flex flex-row center-items">
-        <h1 class="title-section white-text" v-if="isActiveTopRatedMovies">Film</h1>
-        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveTopRatedMovies">
+        <h1 class="title-section white-text" v-if="isActiveTopRatedMovies && !search">Film</h1>
+        <select name="genres" class="genres" v-model="selectedGenre" v-if="isActiveTopRatedMovies && !search">
           <option value="all">Generi</option>
-          <option v-bind:value="genre.id" v-for="(genre, index) in genres">{{genre.name}}</option>
+          <option v-bind:value="genre.id" v-for="(genre, index) in genres" :key="genre.id">{{genre.name}}</option>
         </select>
       </div>
       
-      <div class="movie-container" v-if="isActiveTopRatedMovies">
+      <div class="movie-container" v-if="isActiveTopRatedMovies && !search">
 
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in filterMovies">
+        <div class="movie" v-for="(movie, index) in filterMovies" :key="movie.id">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->
@@ -214,8 +223,8 @@
             <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
             <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
             <div>
-              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
             </div>
             <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
             <div class="container-flex row justify-center">
@@ -228,7 +237,7 @@
       <!-- SEARCH RESULTS SECTION -->
       <div class="movie-container">
         <!-- Movies and TV Shows card template -->
-        <div class="movie" v-for="(movie, index) in filterByCategory">
+        <div class="movie" v-for="(movie, index) in filterByCategory" :key="movie.id">
           <!-- Poster -->
           <img class="poster" v-bind:src="'https://image.tmdb.org/t/p/w342' + movie.poster_path" alt="img" onerror="this.src='img/poster-unavailable.jpg'">
           <!-- Movies and TV Shows infos -->
@@ -236,8 +245,8 @@
             <h3 class="text-ellipsis">{{movie.title}}{{movie.name}}</h3>
             <span class="original-title text-ellipsis">Titolo originale: {{movie.original_title}}{{movie.original_name}}</span>
             <div>
-              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" class="fas fa-star stars"></i>
-              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" class="fas fa-star empty-stars"></i>
+              <span class="vote">Voto: </span><i v-for="(star, index) in Math.ceil(movie.vote_average / 2)" :key="star.id" class="fas fa-star stars"></i>
+              <i v-for="n in 5 - Math.ceil(movie.vote_average / 2)" :key="n.id" class="fas fa-star empty-stars"></i>
             </div>
             <p class="white-text overview text-ellipsis">Descrizione: {{movie.overview}}</p>
             <div class="container-flex row justify-center">
