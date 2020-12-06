@@ -135,6 +135,7 @@ const boolFlix = new Vue({
             }).then(result => {
                 this.tvPopular = result.data.results;
             })
+
             this.infinteScroll();
     },
     methods: {
@@ -223,7 +224,7 @@ const boolFlix = new Vue({
         },
         scrollRight(target) {
             let content = document.querySelector(target);
-            content.scrollLeft += 200;
+                content.scrollLeft += 200;
         },
         scrollLeft(target) {
             let content = document.querySelector(target);
@@ -240,7 +241,7 @@ const boolFlix = new Vue({
             window.onscroll = () => {
                 let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
-                if (bottomOfWindow) {
+                if (bottomOfWindow && this.isActiveTopRatedMovies) {
                     axios.get("https://api.themoviedb.org/3/movie/popular", {
                         params: {
                             'api_key': API_KEY,
@@ -251,7 +252,9 @@ const boolFlix = new Vue({
                     }).then(result => {
                         this.moviePopular = [...this.moviePopular.concat(result.data.results)];
                     }).catch(() => this.multiSearch = []);
+                }   
 
+                if(bottomOfWindow && this.isActiveShows) {
                     axios.get("https://api.themoviedb.org/3/tv/popular", {
                         params: {
                             'api_key': API_KEY,
@@ -262,7 +265,8 @@ const boolFlix = new Vue({
                     }).then(result => {
                         this.tvPopular = [...this.tvPopular.concat(result.data.results)];
                     }).catch(() => this.multiSearch = []);
-                }   this.selectedPage++
+                }
+                this.selectedPage++
             }
         },
         isActiveTv() {
