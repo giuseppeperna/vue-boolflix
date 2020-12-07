@@ -9,7 +9,7 @@
 	<li>JavaScript</li>
 	<li>Vue</li>
 	<li>Axios</li>
-	<li>API from The Movie Database (TMDb)</li>
+	<li>The Movie Database (TMDb) API</li>
 <ul>
 
 <h4> Homepage </h4>
