@@ -1,16 +1,29 @@
-Boolflix
-
 <h1> Boolflix </h1>
-<p> A Netflix Web App clone </p>
+<h4> A Netflix Web App clone </h4>
 
+<p> Powered by Boolean Careers and developed with: <p>
+
+<ul>
+	<li>Html</li>
+	<li>CSS</li>
+	<li>JavaScript</li>
+	<li>Vue</li>
+	<li>Axios</li>
+	<li>API from The Movie Database (TMDb)</li>
+<ul>
+
+<h4> Homepage </h4>
 <img src="screens/Boolflix_1.jpg">
+<h4> Movies and Tv Shows </h4>
 <img src="screens/Boolflix_2.jpg">
 <img src="screens/Boolflix_3.jpg">
+<h4> Search results </h4>
 <img src="screens/Boolflix_4.jpg">
 
-<img align="center" src="screens/GIF_Boolflix_1.gif">
-<img align="center" src="screens/GIF_Boolflix_2.gif">
-<img align="center" src="screens/GIF_Boolflix_3.gif">
+<h4> GIFs </h4>
+<img src="screens/GIF_Boolflix_1.gif">
+<img src="screens/GIF_Boolflix_2.gif">
+<img src="screens/GIF_Boolflix_3.gif">
 
 
 
