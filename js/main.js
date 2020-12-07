@@ -174,22 +174,6 @@ const boolFlix = new Vue({
                 console.log(error);
             });
         },
-        searchPeople() {
-            axios.get("https://api.themoviedb.org/3/search/person", {
-                params: {
-                    'api_key': API_KEY,
-                    query: this.search,
-                    page: this.selectedPage,
-                    language: "it-IT",
-                }
-            }).then(result => {
-                this.people = result.data.results;
-                this.isActiveTopRatedMovies = false;
-                this.isActiveShows = false;
-            }).catch((error) => {
-                console.log(error);
-            });
-        },
         nextPage() {
             this.selectedPage += 1;
             this.elementPage++
