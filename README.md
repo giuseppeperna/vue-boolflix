@@ -10,7 +10,7 @@
 	<li>Vue</li>
 	<li>Axios</li>
 	<li>The Movie Database (TMDb) API</li>
-<ul>
+</ul>
 
 <h4> Homepage </h4>
 <img src="screens/Boolflix_1.jpg">
